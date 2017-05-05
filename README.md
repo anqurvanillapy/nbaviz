@@ -10,9 +10,21 @@ You will need [Leiningen][] 2.0.0 or above installed.
 
 ## Running
 
+To init a local database (PostgreSQL), run `initdb.sh`:
+
+```bash
+$ bash initdb.sh
+# Mainly the following three commands:
+#   initdb nbaviz-db
+#   postgres -D nbaviz-db &
+#   createdb nbaviz
+```
+
 To start a web server for the application, run:
 
-    lein ring server
+```bash
+lein ring server
+```
 
 ## License
 
