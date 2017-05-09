@@ -23,7 +23,7 @@ $ bash initdb.sh
 To start a web server for the application, run:
 
 ```bash
-lein ring server
+$ lein ring server
 ```
 
 ## License

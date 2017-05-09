@@ -3,15 +3,18 @@
   :url "http://github.com/anqurvanillapy/nbaviz"
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.8.0"]
+                 [org.clojure/data.csv "0.1.3"]
                  [compojure "1.5.1"]
                  [ring/ring-defaults "0.2.1"]
                  [ring/ring-json "0.4.0"]
                  [hiccup "1.0.5"]
                  [org.clojure/java.jdbc "0.7.0-alpha3"]
                  [org.postgresql/postgresql "42.0.0"]]
-  :plugins [[lein-ring "0.9.7"]]
+  :plugins [[lein-ring "0.9.7"]
+            [lein-exec "0.3.6"]]
   :ring {:handler nbaviz.handler/app}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                         [ring/ring-mock "0.3.0"]]
-        :resource-paths ["src/nbaviz/resources"]}})
+         :resource-paths ["src/nbaviz/resources"]}}
+  :aliases {"boot" ["exec" "-p" "scripts/boot.clj"]})
