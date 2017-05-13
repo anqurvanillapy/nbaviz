@@ -19,7 +19,7 @@
                              :smallint          ; points
                              "char(9)"          ; team season
                              "char(3)"          ; team league
-                             "varchar(30)"      ; team name
+                             "varchar(80)"      ; team name
                              "varchar(80)"      ; team coach
                              "char(4)"          ; team from
                              "char(4)"          ; team to
@@ -28,7 +28,7 @@
                              :int               ; team wins
                              :int               ; team loses
                              :smallint          ; team champions
-                             "varchar(30)"      ; arena team name
+                             "varchar(80)"      ; arena team name
                              "char(9)"          ; arena start-end
                              "varchar(80)"      ; arena name
                              "varchar(80)"      ; arena location
@@ -38,10 +38,10 @@
       (doseq [row tuples]
         (let [[rk pn s a ta lg gp p
                ts tlg tn tc tf tt ty tgp tw tl tch
-               atn ase an al ac] row
+               atn ase an al ac] (doall (map string/trim row))
               ;; FIXME: Cannot bind the lambda to to-int.
-              #(try (Integer/parseInt %)
-                    (catch NumberFormatException _ (int 0))) to-int]
+              to-int #(try (Integer/parseInt %)
+                           (catch NumberFormatException _ 0))]
           ;; Parse some integer-typed data.
           (sql/insert! dbaddr :players nil [(to-int rk)
                                             pn s
