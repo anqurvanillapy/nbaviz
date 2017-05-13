@@ -4,7 +4,7 @@
          '[clojure.java.jdbc :as sql])
 
 (with-open [in-file (io/reader "src/nbaviz/resources/datasets.csv")]
-  (let [dbaddr "postgresql://localhost:5432/nbaviz"
+  (let [db-spec "postgresql://localhost:5432/nbaviz"
         tbl (csv/read-csv in-file)]
     (let [[checksum] (first tbl)
           attrs (doall (map vector
@@ -34,16 +34,15 @@
                              "varchar(80)"      ; arena location
                              :int]))            ; arena capacity
           tuples (drop 2 tbl)]
-      (sql/db-do-commands dbaddr (sql/create-table-ddl :players attrs))
+      (sql/db-do-commands db-spec (sql/create-table-ddl :players attrs))
       (doseq [row tuples]
         (let [[rk pn s a ta lg gp p
                ts tlg tn tc tf tt ty tgp tw tl tch
                atn ase an al ac] (doall (map string/trim row))
-              ;; FIXME: Cannot bind the lambda to to-int.
               to-int #(try (Integer/parseInt %)
                            (catch NumberFormatException _ 0))]
           ;; Parse some integer-typed data.
-          (sql/insert! dbaddr :players nil [(to-int rk)
+          (sql/insert! db-spec :players nil [(to-int rk)
                                             pn s
                                             (to-int a)
                                             ta lg

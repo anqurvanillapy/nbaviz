@@ -4,11 +4,12 @@
 
 (deftest test-db
   (testing "db init"
-    (let [addr "postgresql://localhost:5432/nbaviz"]
-      (sql/db-do-commands addr (sql/create-table-ddl :testing [[:data :text]]))
-      (let [[row] (sql/insert! addr :testing {:data "foo"})]
+    (let [db-spec "postgresql://localhost:5432/nbaviz"]
+      (sql/db-do-commands db-spec
+                          (sql/create-table-ddl :testing [[:data :text]]))
+      (let [[row] (sql/insert! db-spec :testing {:data "foo"})]
         (is (= (:data row) "foo")))
-      (let [[row] (sql/query addr ["SELECT * FROM testing"])]
+      (let [[row] (sql/query db-spec ["SELECT * FROM testing"])]
         (is (= (:data row) "foo")))
-      (let [[ret] (sql/db-do-commands addr "DROP TABLE testing")]
+      (let [[ret] (sql/db-do-commands db-spec "DROP TABLE testing")]
         (is (= ret 0))))))
