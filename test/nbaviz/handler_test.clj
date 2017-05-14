@@ -12,11 +12,17 @@
       (is (= (last (string/split (get (:headers response) "Location") #"/"))
              "index.html"))))
 
-  (testing "player name route"
-    (let [response (app (mock/request :get "/name/Russell%20Westbrook"))]
+  (testing "POST player name route"
+    (let [response
+          (app (-> (mock/request :post "/player"
+                                 (json/write-str {"player" "Russell Westbrook"
+                                                  "attrs" ["teamname"]}))
+                   (mock/content-type "application/json")))]
       (is (= (:status response) 200))
-      (is (= (get (first (json/read-str (:body response))) "teamname")
-             "Oklahoma City Thunder"))))
+      (let [body (json/read-str (:body response))]
+        (is (= (get body "ok") true))
+        (is (= (get (first (get body "data")) "teamname")
+               "Oklahoma City Thunder")))))
 
   (testing "not-found route"
     (let [response (app (mock/request :get "/invalid"))]
