@@ -22,7 +22,7 @@
                                  "WHERE player="
                                  "'" player "'")])]
       (resp/response (if (empty? query)
-                       {:ok false :error (str player " not found")}
+                       {:ok false :error (str "Player '" player "' not found")}
                        {:ok true :data query}))))
   (route/not-found "404 Page Not Found"))
 
